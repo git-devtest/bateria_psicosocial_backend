@@ -1,0 +1,49 @@
+Estado del Backend
+- Autenticación y Protección de Rutas
+- Se ha implementado el middleware AuthGuard para restringir accesos según el rol del usuario.
+- Uso de JWT para autenticación.
+- Se protege la información de usuarios y empleados con validaciones de acceso.
+
+Módulo de Usuarios
+- Implementado con CRUD completo (obtenerUsuarios, obtenerUsuarioPorId, crearUsuario, actualizarUsuario, eliminarUsuario).
+- Solo los administradores pueden crear, actualizar o eliminar usuarios.
+- Contraseñas encriptadas con bcryptjs.
+- Control de acceso para evitar que usuarios editen otros perfiles sin autorización.
+
+Módulo de Empleados
+- CRUD funcional (obtenerEmpleados, obtenerEmpleadoPorId, crearEmpleado, actualizarEmpleado, eliminarEmpleado).
+- Se relacionan con la empresa y usuario correspondiente.
+- Validaciones para evitar accesos no autorizados.
+- Se registra quién realiza cada acción (usuarioAutenticado).
+
+Base de Datos y Seguridad
+- Se están manejando las consultas con pool.promise().
+- Se mantiene una buena estructura de consultas SQL con ? para evitar inyecciones.
+- Se están utilizando SET @usuario_actual = ? para identificar quién hace cambios.
+
+Pendientes del Backend
+✅ Hecho | 🔄 En progreso | ❌ Pendiente
+
+✅ Protección de rutas con JWT.
+✅ Implementación del CRUD de usuarios y empleados.
+🔄 Definir y crear resto de las tablas en MySQL (falta ejecutar scripts).
+🔄 Generar datos dummies para pruebas.
+❌ Implementar vistas SQL para consultas estadísticas.
+❌ Probar endpoints de todas las tablas (ya hay varios probados).
+❌ Implementar módulo de reportes (PDF/Excel).
+❌ Crear logs y rollback para acciones críticas.
+❌ Optimización de la BD para cálculos eficientes.
+
+Frontend (Estado)
+Hasta ahora no se ha trabajado en el frontend (solo backend).
+Se debe comenzar con:
+
+🔄 Estructurar el frontend Angular standalone.
+❌ Implementar interfaz de usuario para usuarios y empleados.
+❌ Integrar backend con frontend.
+❌ Mostrar datos de la base de datos en el dashboard.
+
+Próximos Pasos
+1️⃣ Terminar el backend (crear tablas, pruebas, consultas estadísticas, reportes).
+2️⃣ Iniciar frontend en Angular (integración con backend).
+3️⃣ Desplegar en Render, Vercel y Railway cuando todo esté listo.

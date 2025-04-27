@@ -1,0 +1,163 @@
+CREATE TABLE extralaboral_opciones_respuesta (
+   id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+   etiqueta varchar(30) NOT NULL,
+   valor INT NOT NULL
+);
+
+INSERT INTO extralaboral_opciones_respuesta (etiqueta, valor) VALUES 
+   ('Siempre', 1),
+   ('Casi siempre', 2),
+   ('Algunas veces', 3),
+   ('Casi nunca', 4),
+   ('Nunca', 5);
+
+
+CREATE TABLE extralaboral_preguntas (
+    id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    descripcion VARCHAR(255) NOT NULL
+);
+
+INSERT INTO extralaboral_preguntas (descripcion) VALUES
+('Es fácil trasportarme entre mi casa y el trabajo'),
+('Tengo que tomar varios medios de transporte para llegar a mi lugar de trabajo'),
+('Paso mucho tiempo viajando de ida y regreso al trabajo'),
+('Me trasporto cómodamente entre mi casa y el trabajo'),
+('La zona donde vivo es segura'),
+('En la zona donde vivo se presentan hurtos y mucha delincuencia'),
+('Desde donde vivo me es fácil llegar al centro médico donde me atienden'),
+('Cerca a mi vivienda las vías están en buenas condiciones'),
+('Cerca a mi vivienda encuentro fácilmente transporte'),
+('Las condiciones de mi vivienda son buenas'),
+('En mi vivienda hay servicios de agua y luz'),
+('Las condiciones de mi vivienda me permiten descansar cuando lo requiero'),
+('Las condiciones de mi vivienda me permiten sentirme cómodo'),
+('Me queda tiempo para actividades de recreación'),
+('Fuera del trabajo tengo tiempo suficiente para descansar'),
+('Tengo tiempo para atender mis asuntos personales y del hogar'),
+('Tengo tiempo para compartir con mi familia o amigos'),
+('Tengo buena comunicación con las personas cercanas'),
+('Las relaciones con mis amigos son buenas'),
+('Converso con personas cercanas sobre diferentes temas'),
+('Mis amigos están dispuestos a escucharme cuando tengo problemas'),
+('Cuento con el apoyo de mi familia cuando tengo problemas'),
+('Puedo hablar con personas cercanas sobre las cosas que me pasan'),
+('Mis problemas personales o familiares afectan mi trabajo'),
+('La relación con mi familia cercana es cordial'),
+('Mis problemas personales o familiares me quitan la energía que necesito para trabajar'),
+('Los problemas con mis familiares los resolvemos de manera amistosa'),
+('Mis problemas personales o familiares afectan mis relaciones en el trabajo'),
+('El dinero que ganamos en el hogar alcanza para cubrir los gastos básicos'),
+('Tengo otros compromisos económicos que afectan mucho el presupuesto familiar'),
+('En mi hogar tenemos deudas difíciles de pagar');
+
+CREATE TABLE extralaboral_respuestas (
+  id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+  id_formulario INT NOT NULL,  -- se refiere a la tabla 'form_datos_generales'
+  id_pregunta INT NOT NULL,
+  id_opcion_respuesta INT NOT NULL,
+  FOREIGN KEY (id_formulario) REFERENCES form_datos_generales(id),
+  FOREIGN KEY (id_pregunta) REFERENCES extralaboral_preguntas(id),
+  FOREIGN KEY (id_opcion_respuesta) REFERENCES extralaboral_opciones_respuesta(id)
+);
+
+
+INSERT INTO extralaboral_respuestas (id_formulario,id_pregunta,id_opcion_respuesta) VALUES
+   (1,1,1),
+   (1,2,2),
+   (1,3,3),
+   (1,4,4),
+   (1,5,5),
+   (1,6,1),
+   (1,7,5),
+   (1,8,3),
+   (1,9,3),
+   (1,10,1),
+   (1,11,4),
+   (1,12,3),
+   (1,13,2),
+   (1,14,5),
+   (1,15,3),
+   (1,16,2),
+   (1,17,1),
+   (1,18,5),
+   (1,19,3),
+   (1,20,1),
+   (1,21,2),
+   (1,22,3),
+   (1,23,4),
+   (1,24,5),
+   (1,25,1),
+   (1,26,5),
+   (1,27,2),
+   (1,28,3),
+   (1,29,4),
+   (1,30,5),
+   (1,31,3);
+
+
+SELECT 
+  fdg.id AS encuesta_id,
+  fdg.fecha_aplicacion,
+  fdg.identificacion_respondiente AS id_empleado,
+  elp.descripcion AS pregunta,
+  eor.etiqueta AS respuesta
+FROM 
+  extralaboral_respuestas elr
+JOIN 
+  form_datos_generales fdg ON elr.id_formulario = fdg.id
+JOIN 
+  extralaboral_preguntas elp ON elr.id_pregunta = elp.id
+JOIN 
+  extralaboral_opciones_respuesta eor ON elr.id_opcion_respuesta = eor.id
+WHERE 
+  fdg.id = 1
+ORDER BY 
+  elp.id;
+   
+CREATE OR REPLACE VIEW vista_extralaboral_resumen AS
+SELECT 
+  fdg.id AS encuesta_id,
+  fdg.fecha_aplicacion,
+  fdg.identificacion_respondiente AS id_empleado,
+  elp.descripcion AS pregunta,
+  eor.etiqueta AS respuesta
+FROM 
+  extralaboral_respuestas elr
+JOIN 
+  form_datos_generales fdg ON elr.id_formulario = fdg.id
+JOIN 
+  extralaboral_preguntas elp ON elr.id_pregunta = elp.id
+JOIN 
+  extralaboral_opciones_respuesta eor ON elr.id_opcion_respuesta = eor.id
+WHERE 
+  fdg.id = 1
+ORDER BY 
+  elp.id;
+
+CREATE VIEW vista_extralaboral_estadistica AS
+SELECT 
+  elp.id AS id_pregunta,
+  elp.descripcion AS pregunta,
+  elor.id AS id_opcion,
+  elor.etiqueta AS opcion_respuesta,
+  COUNT(elr.id_opcion_respuesta) AS frecuencia,
+  ROUND(
+    COUNT(elr.id_opcion_respuesta) * 100.0 / 
+    (SELECT COUNT(*) 
+     FROM extralaboral_respuestas 
+     WHERE id_pregunta = elp.id), 
+    2
+  ) AS porcentaje
+FROM 
+  extralaboral_preguntas elp
+JOIN 
+  extralaboral_opciones_respuesta elor
+LEFT JOIN 
+  extralaboral_respuestas elr 
+    ON elp.id = elr.id_pregunta 
+   AND elor.id = elr.id_opcion_respuesta
+GROUP BY 
+  elp.id, elp.descripcion, elor.id, elor.etiqueta
+ORDER BY 
+  elp.id, elor.id;
+

@@ -1,0 +1,130 @@
+CREATE TABLE estres_preguntas (
+    id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    descripcion VARCHAR(255) NOT NULL
+);
+
+
+INSERT INTO estres_preguntas (descripcion) VALUES
+('Dolores en el cuello y espalda o tensión muscular.'),
+('Problemas gastrointestinales, úlcera péptica, acidez, problemas digestivos o del colon.'),
+('Problemas respiratorios.'),
+('Dolor de cabeza.'),
+('Trastornos del sueño como somnolencia durante el día o desvelo en la noche.'),
+('Palpitaciones en el pecho o problemas cardíacos.'),
+('Cambios fuertes del apetito.'),
+('Problemas relacionados con la función de los órganos genitales (impotencia, frigidez).'),
+('Dificultad en las relaciones familiares.'),
+('Dificultad para permanecer quieto o dificultad para iniciar actividades.'),
+('Dificultad en las relaciones con otras personas.'),
+('Sensación de aislamiento y desinterés.'),
+('Sentimiento de sobrecarga de trabajo.'),
+('Dificultad para concentrarse, olvidos frecuentes.'),
+('Aumento en el número de accidentes de trabajo.'),
+('Sentimiento de frustración, de no haber hecho lo que se quería en la vida.'),
+('Cansancio, tedio o desgano.'),
+('Disminución del rendimiento en el trabajo o poca creatividad.'),
+('Deseo de no asistir al trabajo.'),
+('Bajo compromiso o poco interés con lo que se hace.'),
+('Dificultad para tomar decisiones.'),
+('Temor de cambiar de empleo.'),
+('Sentimiento de soledad y miedo.'),
+('Sentimiento de irritabilidad, actitudes y pensamientos negativos.'),
+('Sentimiento de angustia, preocupación o tristeza.'),
+('Consumo de drogas para aliviar la tensión o los nervios.'),
+('Sentimientos de que “no vale nada”, o “no sirve para nada”.'),
+('Consumo de bebidas alcohólicas o café o cigarrillo.'),
+('Sentimiento de que está perdiendo la razón.'),
+('Comportamientos rígidos, obstinación o terquedad.'),
+('Sensación de no poder manejar los problemas de la vida.')
+
+CREATE TABLE estres_respuestas (
+  id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+  id_formulario INT NOT NULL,  -- se refiere a la tabla 'form_datos_generales'
+  id_pregunta INT NOT NULL,
+  id_opcion_respuesta INT NOT NULL,
+  FOREIGN KEY (id_formulario) REFERENCES form_datos_generales(id),
+  FOREIGN KEY (id_pregunta) REFERENCES estres_preguntas(id),
+  FOREIGN KEY (id_opcion_respuesta) REFERENCES estres_opciones_respuesta(id)
+);
+
+INSERT INTO estres_respuestas (id_formulario,id_pregunta,id_opcion_respuesta) VALUES
+   (1,1,1),
+   (1,2,2),
+   (1,3,3),
+   (1,4,4),
+   (1,5,1),
+   (1,6,1),
+   (1,7,2),
+   (1,8,3),
+   (1,9,3),
+   (1,10,1),
+   (1,11,4),
+   (1,12,2),
+   (1,13,2),
+   (1,14,1),
+   (1,15,3),
+   (1,16,2),
+   (1,17,1),
+   (1,18,4),
+   (1,19,3),
+   (1,20,1),
+   (1,21,2),
+   (1,22,3),
+   (1,23,4),
+   (1,24,1),
+   (1,25,1),
+   (1,26,1),
+   (1,27,2),
+   (1,28,3),
+   (1,29,4),
+   (1,30,3),
+   (1,31,3);
+
+SELECT 
+  fdg.id AS encuesta_id,
+  fdg.fecha_aplicacion,
+  fdg.identificacion_respondiente AS id_empleado,
+  ep.descripcion AS pregunta,
+  eor.etiqueta AS respuesta
+FROM 
+  estres_respuestas er
+JOIN 
+  form_datos_generales fdg ON er.id_formulario = fdg.id
+JOIN 
+  estres_preguntas ep ON er.id_pregunta = ep.id
+JOIN 
+  estres_opciones_respuesta eor ON er.id_opcion_respuesta = eor.id
+WHERE 
+  fdg.id = 1
+ORDER BY 
+  ep.id;
+
+
+CREATE VIEW vista_estres_estadistica AS
+SELECT 
+  ep.id AS id_pregunta,
+  ep.descripcion AS pregunta,
+  eor.id AS id_opcion,
+  eor.etiqueta AS opcion_respuesta,
+  COUNT(er.id_opcion_respuesta) AS frecuencia,
+  ROUND(
+    COUNT(er.id_opcion_respuesta) * 100.0 / 
+    (SELECT COUNT(*) 
+     FROM estres_respuestas 
+     WHERE id_pregunta = ep.id), 
+    2
+  ) AS porcentaje
+FROM 
+  estres_preguntas ep
+JOIN 
+  estres_opciones_respuesta eor
+LEFT JOIN 
+  estres_respuestas er 
+    ON ep.id = er.id_pregunta 
+   AND eor.id = er.id_opcion_respuesta
+GROUP BY 
+  ep.id, ep.descripcion, eor.id, eor.etiqueta
+ORDER BY 
+  ep.id, eor.id;
+
+

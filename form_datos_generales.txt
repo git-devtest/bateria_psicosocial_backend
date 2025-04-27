@@ -1,0 +1,67 @@
+Tablas Auxiliares
+sexo
+estado_civil
+ultimo_nivel_estudios
+estrato_serv_publicos_vivienda
+tipo_vivienda
+tipo_cargo
+tipo_contrato
+tipo_salario
+
+
+
+Tabla Datos Generales
+CREATE TABLE form_datos_generales (
+  id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+  fecha_aplicacion DATE NOT NULL,
+  identificacion_respondiente VARCHAR(12) NOT NULL,
+  nombre_completo VARCHAR(60) NOT NULL,
+  sexo INT NOT NULL,
+  año_nacimiento VARCHAR(4) NOT NULL,
+  estado_civil INT NOT NULL,
+  ultimo_nivel_estudios INT NOT NULL,
+  ocupacion_profesion VARCHAR(60) NOT NULL,
+  lugar_residencia_actual_ciudad_mpio VARCHAR(60) NOT NULL,
+  lugar_residencia_actual_depto VARCHAR(60) NOT NULL,
+  estrato_serv_publicos_vivienda INT NOT NULL,
+  tipo_vivienda INT NOT NULL,
+  num_personas_dependientes_respondiente INT NOT NULL,
+  lugar_trabajo_actual_ciudad_mpio VARCHAR(60) NOT NULL,
+  lugar_trabajo_actual_depto VARCHAR(60) NOT NULL,
+  cuantos_anios_trabaja_empresa_menos_un_año INT NOT NULL,
+  cuantos_anios_trabaja_empresa_mas_un_año INT NOT NULL,
+  nombre_cargo_empresa VARCHAR(60) NOT NULL,
+  tipo_cargo INT NOT NULL,
+  cuantos_anios_desempenia_cargo_empresa_menos_un_año INT NOT NULL,
+  cuantos_anios_desempenia_cargo_empresa_mas_un_año INT NOT NULL,
+  nombre_depto_area_seccion_empresa VARCHAR(60) NOT NULL,
+  tipo_contrato INT NOT NULL,
+  horas_diarias_trabajo_cargo INT NOT NULL,
+  tipo_salario INT NOT NULL,
+
+  -- Claves foráneas
+  CONSTRAINT fk_sexo FOREIGN KEY (sexo) REFERENCES sexo(id),
+  CONSTRAINT fk_estado_civil FOREIGN KEY (estado_civil) REFERENCES estado_civil(id),
+  CONSTRAINT fk_nivel_estudios FOREIGN KEY (ultimo_nivel_estudios) REFERENCES ultimo_nivel_estudios(id),
+  CONSTRAINT fk_estrato FOREIGN KEY (estrato_serv_publicos_vivienda) REFERENCES estrato_serv_publicos_vivienda(id),
+  CONSTRAINT fk_tipo_vivienda FOREIGN KEY (tipo_vivienda) REFERENCES tipo_vivienda(id),
+  CONSTRAINT fk_tipo_cargo FOREIGN KEY (tipo_cargo) REFERENCES tipo_cargo(id),
+  CONSTRAINT fk_tipo_contrato FOREIGN KEY (tipo_contrato) REFERENCES tipo_contrato(id),
+  CONSTRAINT fk_tipo_salario FOREIGN KEY (tipo_salario) REFERENCES tipo_salario(id)
+);
+
+INSERT INTO form_datos_generales (fecha_aplicacion,identificacion_respondiente,nombre_completo,sexo,año_nacimiento,estado_civil,ultimo_nivel_estudios,ocupacion_profesion,lugar_residencia_actual_ciudad_mpio,lugar_residencia_actual_depto,estrato_serv_publicos_vivienda,tipo_vivienda,num_personas_dependientes_respondiente,lugar_trabajo_actual_ciudad_mpio,lugar_trabajo_actual_depto,cuantos_anios_trabaja_empresa_menos_un_año,cuantos_anios_trabaja_empresa_mas_un_año,nombre_cargo_empresa,tipo_cargo,cuantos_anios_desempenia_cargo_empresa_menos_un_año,cuantos_anios_desempenia_cargo_empresa_mas_un_año,nombre_depto_area_seccion_empresa,tipo_contrato,horas_diarias_trabajo_cargo,tipo_salario) VALUES (NOW(),'16842961','Jhon Harold Hincapie Marulanda',2,'1981',1,8,'Empleado Asalariado','Jamundí','Valle del Cauca',1,1,2,'Jamundí','Valle del Cauca',0,0,'LIDER TI',2,0,0,'SISTEMAS',3,8,1);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
