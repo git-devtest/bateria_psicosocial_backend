@@ -1,0 +1,40 @@
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+/dist
+/.env
+/.env.local
+/.env.*.local
+
+# Logs
+logs
+*.log
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# System Files
+.DS_Store
+Thumbs.db
+
+# Editor folders
+.vscode/
+.idea/
+
+# Coverage reports
+coverage/
+.nyc_output/
+
+# Miscellaneous
+*.tgz
+*.gz
+*.zip
+*.tar
+*.tar.gz
+*.txt
+.parcel-cache/
+.cache/
