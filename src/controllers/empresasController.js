@@ -8,6 +8,7 @@ const obtenerEmpresas = async (req, res) => {
     try {
         const [empresas] = await promisePool.query('SELECT * FROM empresas');
         responses.ok(res, empresas);
+        console.log(empresas);
     } catch (error) {
         console.error('Error al obtener empresas:', error);
         responses.error( res, 'Error al obtener empresas' );
