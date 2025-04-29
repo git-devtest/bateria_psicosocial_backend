@@ -15,6 +15,7 @@ const app = express();
 const authRoutes = require('./routes/authRoutes');
 const usuariosRoutes = require('./routes/usuariosRoutes');
 const empresasRoutes = require('./routes/empresasRoutes');
+const rolesRoutes = require('./routes/rolesRoutes');
 const estresPreguntasRoutes = require('./routes/estresPreguntasRouter');
 const estresRespuestasRoutes = require('./routes/estresRespuestasRoutes');
 
@@ -33,6 +34,7 @@ app.get('/', (req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api', usuariosRoutes);
 app.use('/api', empresasRoutes);
+app.use('/api', rolesRoutes);
 app.use('/api/estres/preguntas', estresPreguntasRoutes);
 app.use('/api/estres/respuestas', estresRespuestasRoutes);
 
