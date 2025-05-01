@@ -145,10 +145,35 @@ const crearUsuario = async (req, res) => {
     }
 }
 
+// POST /api/usuarios/cambiar-contrasena
+const cambiarContrasena = async (req, res) => {
+    const userId = req.user.id; // Desde el token
+    const { actual, nueva } = req.body;
+  
+    try {
+      // 1. Obtener contraseña actual
+      const [rows] = await promisePool.query('SELECT contrasena FROM usuarios WHERE id = ?', [userId]);
+      if (rows.length === 0) return responses.notFound( res, 'Usuario no encontrado' );
+  
+      const isMatch = await bcryptjs.compare(actual, rows[0].contrasena);
+      if (!isMatch) return responses.badRequest( res, 'La contraseña actual es incorrecta' );
+  
+      // 2. Hashear y actualizar
+      const hashedNueva = await bcryptjs.hash(nueva, 10);
+      await promisePool.query('UPDATE usuarios SET contrasena = ? WHERE id = ?', [hashedNueva, userId]);
+  
+      responses.ok( res, 'Contraseña actualizada correctamente' );
+    } catch (error) {
+      console.error('❌ Error al cambiar contraseña:', error);
+      responses.error( res, 'Error al cambiar contraseña' );
+    }
+  };  
+
 module.exports = { 
     obtenerUsuarios, 
     obtenerUsuarioPorId, 
     actualizarUsuario, 
     eliminarUsuario, 
-    crearUsuario 
+    crearUsuario,
+    cambiarContrasena
 };
