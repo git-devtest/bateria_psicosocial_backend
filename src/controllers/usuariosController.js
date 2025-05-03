@@ -148,7 +148,9 @@ const crearUsuario = async (req, res) => {
 // PUT /api/usuarios/cambiar-contrasena
 const cambiarContrasena = async (req, res) => {
     const userId = req.user.id; // Desde el token
+    console.log(`⚡ Cambiando contraseña para el usuario con ID: ${userId}`);
     const { actual, nueva } = req.body;
+    console.log(`Contraseña actual: ${actual}, Nueva contraseña: ${nueva}`);
   
     try {
       // 1. Obtener contraseña actual
@@ -160,6 +162,7 @@ const cambiarContrasena = async (req, res) => {
   
       // 2. Hashear y actualizar
       const hashedNueva = await bcryptjs.hash(nueva, 10);
+      console.log('Hashed Nueva Contraseña:', hashedNueva);
       await promisePool.query('UPDATE usuarios SET contrasena = ? WHERE id = ?', [hashedNueva, userId]);
   
       responses.ok( res, 'Contraseña actualizada correctamente' );
