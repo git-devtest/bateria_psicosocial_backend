@@ -145,7 +145,7 @@ const crearUsuario = async (req, res) => {
     }
 }
 
-// POST /api/usuarios/cambiar-contrasena
+// PUT /api/usuarios/cambiar-contrasena
 const cambiarContrasena = async (req, res) => {
     const userId = req.user.id; // Desde el token
     const { actual, nueva } = req.body;
