@@ -18,6 +18,7 @@ const obtenerEmpresas = async (req, res) => {
 // Obtener una empresa por ID
 const obtenerEmpresaPorId = async (req, res) => {
     const { id } = req.params;
+    console.log('Obteniendo empresa por ID...');
 
     try {
         const [empresa] = await promisePool.query('SELECT * FROM empresas WHERE id = ?', [id]);
@@ -36,6 +37,7 @@ const obtenerEmpresaPorId = async (req, res) => {
 // Crear una empresa
 const crearEmpresa = async (req, res) => {
     const { nombre, nit, email, telefono, direccion } = req.body;
+    console.log('Creando nueva empresa...');
     const idUsuarioAutenticado = req.user.id; // ID del usuario autenticado
 
     try {
@@ -65,9 +67,9 @@ const crearEmpresa = async (req, res) => {
 // Actualizar una empresa
 const actualizarEmpresa = async (req, res) => {
     const { id } = req.params;
+    console.log('Actualizando empresa :', id);
     const { nombre, nit, email, telefono, direccion } = req.body;
     const idUsuarioAutenticado = req.user.id; // ID del usuario autenticado
-    console.log('Actualizando empresa...');
 
     // Verificar si la empresa existe
     const [existingEmpresa] = await promisePool.query('SELECT * FROM empresas WHERE id = ?', [id]);
@@ -102,7 +104,6 @@ const actualizarEmpresa = async (req, res) => {
             return responses.notFound( res, 'Empresa no encontrada' );
         }
         console.log('Empresa actualizada correctamente');
-
         responses.ok(res, { id, nombre, nit, email, telefono, direccion });
     } catch (error) {
         console.error('Error al actualizar empresa:', error);
@@ -113,8 +114,8 @@ const actualizarEmpresa = async (req, res) => {
 // Eliminar una empresa
 const eliminarEmpresa = async (req, res) => {
     const { id } = req.params;
+    console.log('Eliminando empresa :', id);
     const idUsuarioAutenticado = req.user.id; // ID del usuario autenticado
-    console.log('Eliminando empresa con id:', id);
 
     // Verificar si la empresa existe
     const [existingEmpresa] = await promisePool.query('SELECT * FROM empresas WHERE id = ?', [id]);
@@ -126,7 +127,7 @@ const eliminarEmpresa = async (req, res) => {
     try {
         // Establecer el usuario autenticado como el que está haciendo la consulta, para identificar
         // quien ejecuta acciones y registrarlo en la tabla de logs
-        await promisePool('SET @usuario_actual = ?', [idUsuarioAutenticado]); // Establecer el usuario autenticado
+        await promisePool.query('SET @usuario_actual = ?', [idUsuarioAutenticado]); // Establecer el usuario autenticado
 
         const [result] = await promisePool.query('DELETE FROM empresas WHERE id = ?', [id]);
 
@@ -135,6 +136,7 @@ const eliminarEmpresa = async (req, res) => {
         }
 
         responses.ok( res, { message: 'Empresa eliminada correctamente' } );
+        console.log('Empresa eliminada correctamente');
     } catch (error) {
         console.error('Error al eliminar empresa:', error);
         responses.error( res, 'Error al eliminar empresa' );
