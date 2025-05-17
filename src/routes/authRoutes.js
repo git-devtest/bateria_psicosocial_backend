@@ -4,6 +4,7 @@ const auth = require('../middlewares/auth');
 
 const router = express.Router();
 
+router.post('/', login);
 router.post('/register', register);
 router.post('/login', login);
 router.get('/perfil', auth(), getProfile);   // Middleware para proteger la ruta de perfil

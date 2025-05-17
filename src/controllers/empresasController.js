@@ -1,5 +1,5 @@
 const { promisePool } = require('../config/db'); // Pool de conexiones a la base de datos
-const responses = require('../utils/responses'); // Funciones de respuesta}
+const responses = require('../utils/responses'); // Funciones de respuesta
 
 // Obtener todas las empresas
 const obtenerEmpresas = async (req, res) => {

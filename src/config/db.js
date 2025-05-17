@@ -23,7 +23,8 @@ pool.getConnection((err, connection) => {
     connection.release();
 });
 
-const promisePool = pool.promise(); // <-- agregas esto
+// Creo el promisePool para reducir líneas
+const promisePool = pool.promise();
 
 // Exportar el pool para usarlo en otros módulos
-module.exports = { pool, promisePool }; // <-- exportas ambos
+module.exports = { pool, promisePool };
