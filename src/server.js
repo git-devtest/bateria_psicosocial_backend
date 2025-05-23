@@ -18,6 +18,7 @@ const empresasRoutes = require('./routes/empresasRoutes');
 const rolesRoutes = require('./routes/rolesRoutes');
 const estresPreguntasRoutes = require('./routes/estresPreguntasRouter');
 const estresRespuestasRoutes = require('./routes/estresRespuestasRoutes');
+const formDatosGeneralesRoutes = require('./routes/formDatosGeneralesRoutes');
 
 // Middlewares
 app.use(express.json());
@@ -35,6 +36,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api', usuariosRoutes);
 app.use('/api', empresasRoutes);
 app.use('/api', rolesRoutes);
+app.use('/api', formDatosGeneralesRoutes); // Ruta de datos generales
 app.use('/api/estres/preguntas', estresPreguntasRoutes);
 app.use('/api/estres/respuestas', estresRespuestasRoutes);
 
