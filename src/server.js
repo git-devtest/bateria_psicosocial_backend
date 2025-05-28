@@ -19,6 +19,7 @@ const rolesRoutes = require('./routes/rolesRoutes');
 const estresPreguntasRoutes = require('./routes/estresPreguntasRouter');
 const estresRespuestasRoutes = require('./routes/estresRespuestasRoutes');
 const formDatosGeneralesRoutes = require('./routes/formDatosGeneralesRoutes');
+const catalogoRoutes = require('./routes/catalogoRoutes'); // Importar rutas de catálogo
 
 // Middlewares
 app.use(express.json());
@@ -37,6 +38,7 @@ app.use('/api', usuariosRoutes);
 app.use('/api', empresasRoutes);
 app.use('/api', rolesRoutes);
 app.use('/api', formDatosGeneralesRoutes); // Ruta de datos generales
+app.use('/api/catalogos', catalogoRoutes); // Rutas de catálogos
 app.use('/api/estres/preguntas', estresPreguntasRoutes);
 app.use('/api/estres/respuestas', estresRespuestasRoutes);
 

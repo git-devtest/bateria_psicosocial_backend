@@ -47,7 +47,7 @@ const crearFichaDatosGenerales = async (req, res) => {
     );
 
     responses.created(res, 'Ficha de datos generales creada correctamente', { id: result.insertId, ...req.body });
-
+    console.log('✅ Ficha de datos generales creada correctamente:', { id: result.insertId, ...req.body });
   } catch (error) {
     console.error('❌ Error al crear ficha de datos generales:', error);
     responses.error(res, 'Error al crear ficha de datos generales');
